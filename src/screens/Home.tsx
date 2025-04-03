@@ -5,10 +5,19 @@ import { Group } from "@components/Group";
 
 import React, { useState } from "react";
 import { FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 export function Home() {
-    const [ groupSelected, setgroupSelected ] = useState("costa")
+    const [ exercises, setexercises ] = useState(["Flexão da Barra", "Remada curvada", "Remada unilateral", "Levantamento Terra"])
     const [ groups, setgroups ] = useState(["costa", "Biceps", "Triceps", "Ombro"])
+    const [ groupSelected, setgroupSelected ] = useState("costa")
+
+    const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+    function handleOpenExerciseDetails() {
+        navigation.navigate("exercise")
+    }
 
     return (
         <VStack flex={1}>
@@ -20,7 +29,7 @@ export function Home() {
             renderItem={({ item }) => (
                     <Group
                         name={item}
-                        isActive={groupSelected === item}
+                        isActive={groupSelected.toLowerCase() === item.toLocaleLowerCase()}
                         onPress={() => setgroupSelected(item)}
                     />
             )}
@@ -30,18 +39,23 @@ export function Home() {
             style={{ marginVertical: 40, maxHeight: 44, minHeight: 44 }}
             />
 
-            <VStack px="$8">
+            <VStack px="$8" flex={1}>
                 <HStack justifyContent="space-between" mb="$5" alignItems="center">
                     <Heading color="$gray200" fontSize="$md" fontFamily="$heading">
                         Exercícios
                     </Heading>
 
                     <Text color="$gray200" fontSize="$sm" fontFamily="$body">
-                        4
+                        { exercises.length }
                     </Text>
                 </HStack>
 
-                <ExerciseCard/>
+                <FlatList 
+                data={exercises} 
+                keyExtractor={item => item} 
+                renderItem={(() => <ExerciseCard onPress={handleOpenExerciseDetails}/>)}
+                showsVerticalScrollIndicator={false}
+                />
 
             </VStack>
         </VStack>
