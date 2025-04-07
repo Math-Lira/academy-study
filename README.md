@@ -31,16 +31,6 @@ O app conta com:
 - **React HookForms**
 - **React Native Paper** – UI com componentes prontos, acessíveis e responsivos
 
-.
-├── assets/                 # Imagens e fontes
-├── components/             # Componentes reutilizáveis
-├── routes/                 # Arquivo de navegação (StackRoutes)
-├── screens/                # Telas do app (Home, StudyScreen)
-├── storage/                # Módulo de persistência com AsyncStorage
-├── utils/                  # Funções utilitárias
-├── App.tsx                 # Entry point da aplicação
-
-
 ---
 
 ## 📲 Instalação e Execução
