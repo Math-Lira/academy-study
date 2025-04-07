@@ -1,7 +1,7 @@
 import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhoto } from "@components/UserPhoto";
-import { Center, VStack, Text, Heading } from "@gluestack-ui/themed";
-import { Alert, ScrollView, TouchableOpacity } from "react-native";
+import { Center, VStack, Text, Heading, useToast } from "@gluestack-ui/themed";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
@@ -13,6 +13,7 @@ import { ToastMessage } from "@components/ToastMessage";
 
 export function Profile() {
     const [ userPhoto, setuserPhoto ] = useState("https://github.com/Math-Lira.png")
+    const toast = useToast()
 
     async function hadleUserPhotoSelect() {
         try {
@@ -35,7 +36,17 @@ export function Profile() {
                 const photoInfo = await FileSystem.getInfoAsync(photoURI) as { size:number; }
     
                 if(photoInfo && (photoInfo.size / 1024 / 1024) > 5){
-                    return Alert.alert("Essa foto e muito grande. Escolha uma de até 5MB")
+                    return toast.show({
+                        placement: "top",
+                        render: ({ id }) => (
+                            <ToastMessage 
+                            id={id} 
+                            action="error" 
+                            title="Imagem muito grande"
+                            description="Essa imagem e muito grande. Escolha uma até 5MB." 
+                            onClose={() => toast.close(id)}/>
+                        )
+                    })
                 }
     
                 setuserPhoto(photoURI)
@@ -48,14 +59,6 @@ export function Profile() {
     return (
         <VStack flex={1}>
             <ScreenHeader title="Perfil"/>
-
-            <ToastMessage
-            id="1"
-            title="Mensagem de sucesso"
-            description="mensagem de teste para sucesso ou erro"
-            action="success"
-            onClose={() => {}}
-            />
 
             <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
                 <Center mt="$6" px="$10">
